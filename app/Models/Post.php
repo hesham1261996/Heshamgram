@@ -10,6 +10,7 @@ use App\Models\Comment ;
 class Post extends Model
 {
     use HasFactory;
+    protected $fillable = ['description' ,'slug' , 'image' ];
     public function owner(){
         return $this->belongsTo(User::class , "user_id");
     }
