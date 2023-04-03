@@ -35,7 +35,12 @@ class PostController extends Controller
             'image'         => ['required' , 'mimes:jpg,jpeg,png,gif'] 
         ]);
         $image = $request['image']->store('posts' , 'public');
-        $data['image'] = $image ;
+
+        $image = $request->file('image') ; 
+        $image_name ='posts/' .time() . '.' . $image->getClientOriginalExtension() ;
+        $image->move(public_path('image/posts') , $image_name);
+
+        $data['image'] = $image_name ;
         $data['slug'] = Str::random(10);
         auth()->user()->posts()->create($data) ;
         return redirect()->back();
