@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Spatie\Backtrace\File;
 
 class PostController extends Controller
 {
@@ -34,7 +35,7 @@ class PostController extends Controller
             'description'   => 'required',
             'image'         => ['required' , 'mimes:jpg,jpeg,png,gif'] 
         ]);
-        $image = $request['image']->store('posts' , 'public');
+        // $image = $request['image']->store('posts' , 'public');
 
         $image = $request->file('image') ; 
         $image_name ='posts/' .time() . '.' . $image->getClientOriginalExtension() ;
@@ -59,7 +60,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('posts.edit' , compact('post'));
     }
 
     /**
@@ -67,7 +68,18 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $data = $request->validate([
+            'description'   => 'required',
+            'image'         => ['nullable' , 'mimes:jpg,jpeg,png,gif'] 
+        ]);
+        if($request->has('image')){
+            $image = $request->file('image') ; 
+            $image_name ='posts/' .time() . '.' . $image->getClientOriginalExtension() ;
+            $image->move(public_path('image/posts') , $image_name);
+            $data['image'] = $image_name ;
+        }
+        $post->update($data);
+        return redirect('/p/' . $post->slug );
     }
 
     /**
@@ -75,6 +87,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        unlink("image/$post->image");
+        $post->delete();
+        return redirect('home');
     }
 }
