@@ -15,7 +15,6 @@
                     </div>
                     @if ($post->owner->id === auth()->id() )
                     <a href="/p/{{$post->slug}}/edit"><i class=' bx bx-message-square-edit text-xl'></i></a>
-                    @endif
                     <form action="/p/{{$post->slug}}/delete" method="POST">
                         @csrf
                         @method('DELETE')
@@ -23,6 +22,8 @@
                             <i class="bx bx-message-square-x ml-2 text-xl text-red-600"></i>
                         </button>
                     </form>
+                    @endif
+
                 </div>
             </div>
             {{-- middle --}}
@@ -60,8 +61,8 @@
                 @csrf
                 <div class="flex flex-row">
                     <textarea name="body" id="comment_body" placeholder="Add a comment  ..."
-                    class="h-5 grow resize-none overflow-hidden border-none bg-none p-0 paceholder-gray-400 outline-0 focus:ring-0"></textarea>
-                    <button type="submit" class="ml-5 border-none bg-white text-blue-500">Post</button>
+                    class="h-5 grow resize-none overflow-hidden border-none bg-none p-0 placeholder-gray-400 outline-0 focus:ring-0"></textarea>
+                    <button type="submit" class="ml-5 border-none bg-white text-blue-500">{{__('Post')}}</button>
                 </div>
 
                 </form>
