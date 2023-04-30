@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\Backtrace\File;
@@ -92,5 +93,11 @@ class PostController extends Controller
         unlink("image/$post->image");
         $post->delete();
         return redirect('home');
+    }
+
+    public function explore(){
+        $posts = Post::whereRelation('owner' , "private_account" , '=' , 0)
+            ->whereNot('id' , auth()->id())->simplePaginate(12) ;
+        return view('posts.explore' , compact('posts')); 
     }
 }
