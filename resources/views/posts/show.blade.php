@@ -9,27 +9,34 @@
             {{-- Top --}}
             <div class="border-b-2">
                 <div class="flex items-center p-5">
-                    <img src="/{{$post->owner->image}}" alt="{{$post->owner->name}}" class="mr-5 h-10 w-10 rounded-full">
+                    <img src="{{$post->owner->image}}" alt="{{$post->owner->name}}" class="mr-5 h-10 w-10 rounded-full">
                     <div class="grow">
                         <a href="/{{$post->owner->username}}" class="font-bold">{{$post->owner->username}}</a>
                     </div>
                     @if ($post->owner->id === auth()->id() )
-                    <a href="/p/{{$post->slug}}/edit"><i class=' bx bx-message-square-edit text-xl'></i></a>
-                    <form action="/p/{{$post->slug}}/delete" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" onclick="return confirm('are you sure?')">
-                            <i class="bx bx-message-square-x ml-2 text-xl text-red-600"></i>
-                        </button>
-                    </form>
+                        <a href="/p/{{$post->slug}}/edit"><i class=' bx bx-message-square-edit text-xl'></i></a>
+                        <form action="/p/{{$post->slug}}/delete" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" onclick="return confirm('are you sure?')">
+                                <i class="bx bx-message-square-x ml-2 text-xl text-red-600"></i>
+                            </button>
+                        </form>
+                    @elseif(auth()->user()->is_following($post->owner))
+                        <a href="/{{$post->owner->username}}/unfollow" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center self-start">
+                            {{__('Unfollow')}}
+                        </a>
+                    @else
+                        <a href="/{{$post->owmer->username}}/follow" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center self-start">
+                            {{__('follow')}}
+                        </a>
                     @endif
-
                 </div>
             </div>
             {{-- middle --}}
             <div class="grow overflow-y-auto">
                 <div class="flex items-start p-5">
-                    <img src="/{{$post->owner->image}}" class="mr-5 h-10 rounded-full">
+                    <img src="{{$post->owner->image}}" class="mr-5 h-10 rounded-full">
                     <div>
                         <a href="/{{$post->owner->username}}" class="font-bold">{{$post->owner->username}}</a>
                         {{$post->description}}
