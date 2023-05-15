@@ -12,24 +12,32 @@
         <div class="px-4 col-span-2 md:ml-0 flex flex-row items-center order-2 md:col-span-3">
             <div class="text-3xl mb-3">{{$user->username}}</div>
             <div class="ml-3">
-                @if ($user->id == auth()->id())
+                @auth
+                    
+                    @if ($user->id == auth()->id())
                     <a href="/{{$user->username}}/edit"
                         class="w-50 border text-sm font-bold px-4 py-1 rounded-md border-neutral-300 text-center">
                         {{__("Edit Profile")}}
                     </a>
-                @elseif(auth()->user()->is_following($user))
-                    <a href="/{{$user->username}}/unfollow" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center self-start">
-                        {{__('Unfollow')}}
+                    @elseif(auth()->user()->is_following($user))
+                        <a href="/{{$user->username}}/unfollow" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center self-start">
+                            {{__('Unfollow')}}
+                        </a>
+                        @elseif(auth()->user()->is_pending($user))
+                        <span class="w-30 bg-gray-400 text-white px-3 py-1 rounded text-center self-start">
+                            {{__('pending')}}
+                        </span>
+                        @else
+                        <a href="/{{$user->username}}/follow" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center self-start">
+                            {{__('follow')}}
+                        </a>
+                    @endif
+                @endauth
+                @guest
+                    <a href="/{{$user->username}}/follow" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center self-start">
+                        {{__('follow')}}
                     </a>
-                @elseif(auth()->user()->is_pending($user))
-                    <span class="w-30 bg-gray-400 text-white px-3 py-1 rounded text-center self-start">
-                        {{__('pending')}}
-                    </span>
-                @else
-                <a href="/{{$user->username}}/follow" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center self-start">
-                    {{__('follow')}}
-                </a>
-                @endif
+                @endguest
             </div>
         </div>
 
@@ -64,21 +72,42 @@
         </div>
     </div>
     {{-- Botton --}}
-    @if ($user->posts->count() > 0  and ($user->private_account == false or auth()->id()==$user->id or auth()->user()->is_following($user)))
-        <div class="grid grid-cols-3 gap-1 my-5">
+    @if ($user->posts()->count() > 0 and ($user->private_account == false or auth()->id() == $user->id))
+        <div class="grid grid-cols-3 gap-4 my-5">
             @foreach ($user->posts as $post)
-                <a href="/p/{{$post->slug}}" class="aspect-square black w-full">
-                    <img src="/image/{{$post->image}}" alt="{{$post->description}}" class="w-full aspect-square object-cover">
+                <a class="aspect-square block w-full" href="/p/{{ $post->slug }}">
+                    <div class="group relative">
+                        <img class="w-full aspect-square object-cover" src="image/{{ $post->image }}">
+                        @if (auth()->id() === $post->user_id)
+                            <div
+                                class="absolute top-0 ltr:left-0 rtl:right-0 w-full h-full flex flex-row justify-center items-center group-hover:bg-black/40">
+                                <ul class="invisible group-hover:visible flex flex-row">
+                                    <li class="flex items-center text-2xl text-white font-bold ltr:mr-2 rtl:ml-2">
+                                        <i class='bx bxs-heart ltr:mr-1 rtl:ml-1'></i>
+                                            <span>
+                                        {{ $post->likes()->count() }}
+                                            </span>
+                                    </li>
+                                    <li class="flex items-center text-2xl text-white font-bold">
+                                        <i class='bx bx-comment ltr:mr-1 rtl:ml-1'></i>
+                                        <span>
+                                        {{ $post->comments()->count() }}
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        @endif
+                    </div>
                 </a>
             @endforeach
         </div>
     @else
         <div class="w-full text-center mt-20">
-            @if ($user->private_account == true and  auth()->id() != $user->id)
-                {{__('This Account is private. Follow to see thiar is photo')}}
+            @if ($user->private_account == true and $user->id != auth()->id())
+                {{ __('This Account is Private Follow to see their photos.') }}
             @else
-                {{__('This user dose not have any post')}}
-            @endif  
+                {{ __('This user does not have any post.') }}
+            @endif
         </div>
     @endif
 

@@ -13,7 +13,7 @@
                     <div class="grow">
                         <a href="/{{$post->owner->username}}" class="font-bold">{{$post->owner->username}}</a>
                     </div>
-                    @if ($post->owner->id === auth()->id() )
+                    @can('update' , $post)
                         <a href="/p/{{$post->slug}}/edit"><i class=' bx bx-message-square-edit text-xl'></i></a>
                         <form action="/p/{{$post->slug}}/delete" method="POST">
                             @csrf
@@ -22,15 +22,18 @@
                                 <i class="bx bx-message-square-x ml-2 text-xl text-red-600"></i>
                             </button>
                         </form>
-                    @elseif(auth()->user()->is_following($post->owner))
+                    @endcan
+                    @cannot('update' , $post)
+                        @if(auth()->user()->is_following($post->owner))
                         <a href="/{{$post->owner->username}}/unfollow" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center self-start">
                             {{__('Unfollow')}}
                         </a>
-                    @else
-                        <a href="/{{$post->owmer->username}}/follow" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center self-start">
+                        @else
+                        <a href="/{{$post->owner->username}}/follow" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center self-start">
                             {{__('follow')}}
                         </a>
-                    @endif
+                        @endif
+                    @endcannot
                 </div>
             </div>
             {{-- middle --}}
@@ -63,6 +66,13 @@
                     @endforeach
                 </div>
             </div>
+            <div class="p-3 flex border-t flex-row">
+                <livewire:like  :post='$post'/>
+                <a class="grow" onclick="document.getElementById('comment_body').focus()">
+                    <i class="bx bx-comment text-3xl hover:text-gry-400 cursor-pointer mr-3"></i>
+                </a>
+            </div>
+            <livewire:likeby :post='$post' /> 
             <div class="border-t-2 p-5">
                 <form action="/p/{{$post->slug}}/comment" method="post">
                 @csrf
