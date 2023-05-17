@@ -19,18 +19,8 @@
                         class="w-50 border text-sm font-bold px-4 py-1 rounded-md border-neutral-300 text-center">
                         {{__("Edit Profile")}}
                     </a>
-                    @elseif(auth()->user()->is_following($user))
-                        <a href="/{{$user->username}}/unfollow" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center self-start">
-                            {{__('Unfollow')}}
-                        </a>
-                        @elseif(auth()->user()->is_pending($user))
-                        <span class="w-30 bg-gray-400 text-white px-3 py-1 rounded text-center self-start">
-                            {{__('pending')}}
-                        </span>
-                        @else
-                        <a href="/{{$user->username}}/follow" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center self-start">
-                            {{__('follow')}}
-                        </a>
+                    @else
+                        <livewire:follow :userId='$user->id' classes='bg-blue-500 text-white'/>
                     @endif
                 @endauth
                 @guest
@@ -72,7 +62,7 @@
         </div>
     </div>
     {{-- Botton --}}
-    @if ($user->posts()->count() > 0 and ($user->private_account == false or auth()->id() == $user->id))
+    @if ($user->posts()->count() > 0 and ($user->private_account == false or auth()->id() == $user->id or auth()->user()->is_following($user) ))
         <div class="grid grid-cols-3 gap-4 my-5">
             @foreach ($user->posts as $post)
                 <a class="aspect-square block w-full" href="/p/{{ $post->slug }}">
