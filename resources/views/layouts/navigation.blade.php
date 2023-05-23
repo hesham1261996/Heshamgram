@@ -38,13 +38,30 @@
                                 {!! url()->current() == route('explore') ?'<i class="bx bxs-compass"></i>' 
                                     :'<i class="bx bx-compass"></i>'!!}
                             </a>
+                            {{-- Create Post --}}
                             <a href="{{route('create_post')}}">
                                 {!! url()->current() == route('create_post') 
                                 ?'<i class="bx bxs-message-square-add"></i>' 
                                 :'<i class="bx bx-message-square-add"></i>'!!}
                             </a>
+
                         </div>
-                    </div>
+                        <div class="hidden md:block">
+                            <x-dropdown align="right" width="96">
+                                <x-slot name="trigger">
+                                    <button class="text-[1.6rem] ltr:mr-2 rtl:ml-2 leading-5">
+                                        <div class="relative">
+                                            <i class="bx bxs-inbox"></i>
+                                            <livewire:pending-followers-count /> 
+                                        </div>
+                                    </button>
+                                </x-slot>
+                                <x-slot name="content">
+                                    <livewire:pending-followers-list /> 
+                                </x-slot>
+                            </x-dropdown>
+                        </div>
+                        
                     <div class="hidden md:block">
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
@@ -71,6 +88,8 @@
                             </x-slot>
                         </x-dropdown>
                     </div>
+                    </div>
+
                 @endauth
             </div>
             <!-- Hamburger -->

@@ -5,7 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\User;
 use Livewire\Component;
 
-class Follow extends Component
+class FollowButton extends Component
 {
 
     public $post ; 
@@ -24,6 +24,7 @@ class Follow extends Component
         
         auth()->user()->toggel_follow($this->user);
         $this->see_follow_state() ;
+        $this->emit('toggleFollow');
     }
 
     protected function see_follow_state(){
@@ -38,6 +39,6 @@ class Follow extends Component
  
     public function render()
     {
-        return view('livewire.follow');
+        return view('livewire.follow-button');
     }
 }

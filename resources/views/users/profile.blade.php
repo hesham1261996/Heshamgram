@@ -20,7 +20,7 @@
                         {{__("Edit Profile")}}
                     </a>
                     @else
-                        <livewire:follow :userId='$user->id' classes='bg-blue-500 text-white'/>
+                        <livewire:follow-button :userId='$user->id' classes='bg-blue-500 text-white'/>
                     @endif
                 @endauth
                 @guest
@@ -46,22 +46,14 @@
                     </div>
                     <span class="text-neutral-500 md:text-black ">{{$user->posts->count() >1 ? 'posts' : "post"}}</span>
                 </li>
-                <li class="flex flex-col md:flex-row text-center">
-                    <div class="md:mr-1 font-bold md:font-normal">
-                        {{$user->followers()->wherePivot('confirmed' , true)->get()->count()}}
-                    </div>
-                    <span class="text-neutral-500 md:text-black ">{{$user->followers->count() >1 ? 'followers' : "follower"}}</span>
-                </li>
-                <li class="flex flex-col md:flex-row text-center">
-                    <div class="md:mr-1 font-bold md:font-normal">
-                        {{$user->following()->wherePivot('confirmed' , true)->get()->count()}}
-                    </div>
-                    <span class="text-neutral-500 md:text-black ">{{__('following')}}</span>
-                </li>
+                <livewire:followers :userId="$user->id" />
+                
+                <livewire:following :userId='$user->id' />
             </ul>
         </div>
     </div>
     {{-- Botton --}}
+    @auth
     @if ($user->posts()->count() > 0 and ($user->private_account == false or auth()->id() == $user->id or auth()->user()->is_following($user) ))
         <div class="grid grid-cols-3 gap-4 my-5">
             @foreach ($user->posts as $post)
@@ -100,5 +92,6 @@
             @endif
         </div>
     @endif
+    @endauth
 
 </x-app-layout>

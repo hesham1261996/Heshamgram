@@ -75,15 +75,19 @@ class User extends Authenticatable
     }
 
     public function toggel_follow(User $user){
-        if($user->private_account){
-            return $this->following()->toggle($user) ;
-        }
+        
         $this->following()->toggle($user);
-        $this->following()->updateExistingPivot($user , ['confirmed' => true ]);
+
+        if(! $user->private_account){
+
+            $this->following()->updateExistingPivot($user , ['confirmed' => true ]);
+
+        }
 
     }
 
     public function follow(User $user){
+        
         if($user->private_account){
             return $this->following()->attach($user) ;
         }
@@ -104,5 +108,17 @@ class User extends Authenticatable
     }
     public function is_following(User $user){
         return $this->following()->where('following_user_id' ,$user->id )->where('confirmed' , true)->exists();
+    }
+
+    public function pending_followers(){
+        return $this->followers()->where('confirmed' , false)->get();
+    }
+
+    public function confirm(User $user){
+        return $this->followers()->updateExistingPivot($user , ['confirmed' => true]) ;
+    }
+
+    public function deleteFollowRequest(User $user){
+        return $this->followers()->detach($user);
     }
 }
