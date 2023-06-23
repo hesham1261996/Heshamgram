@@ -13,6 +13,10 @@
                 </div>
             </div>
 
+            <div class="hidden sm:flex sm:items-center">
+                <livewire:search /> 
+            </div>
+
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 @guest
@@ -39,11 +43,11 @@
                                     :'<i class="bx bx-compass"></i>'!!}
                             </a>
                             {{-- Create Post --}}
-                            <a href="{{route('create_post')}}">
-                                {!! url()->current() == route('create_post') 
-                                ?'<i class="bx bxs-message-square-add"></i>' 
-                                :'<i class="bx bx-message-square-add"></i>'!!}
-                            </a>
+                            <button  onclick="Livewire.emit('openModal', 'create-post-modal')">
+                                <i class="bx bx-message-square-add"></i>
+                                
+                                
+                            </button>
 
                         </div>
                         <div class="hidden md:block">

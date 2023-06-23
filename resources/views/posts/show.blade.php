@@ -2,7 +2,7 @@
     <div class="h-screen md:flex md:flex-row">
         {{-- left side --}}
         <div class="h-full md:w-7/12 bg-black flex items-center">
-            <img src="/image/{{$post->image}}" alt="{{$post->description}}" class="max-h-screen object-cover mx-auto">
+            <img src="/storage/{{$post->image}}" alt="{{$post->description}}" class="max-h-screen object-cover mx-auto">
         </div>
         {{-- right side --}}
         <div class="flex w-full flex-col bg-white md:w-5/12">
@@ -14,7 +14,9 @@
                         <a href="/{{$post->owner->username}}" class="font-bold">{{$post->owner->username}}</a>
                     </div>
                     @can('update' , $post)
-                        <a href="/p/{{$post->slug}}/edit"><i class=' bx bx-message-square-edit text-xl'></i></a>
+                        {{-- <a href="/p/{{$post->slug}}/edit"><i class=' bx bx-message-square-edit text-xl'></i></a> --}}
+                        <button onclick="Livewire.emit('openModal' , 'edit-post-modal' , {{ json_encode(['post' => $post->id]) }})"><i class=' bx bx-message-square-edit text-xl'></i></button>
+
                         <form action="/p/{{$post->slug}}/delete" method="POST">
                             @csrf
                             @method('DELETE')
