@@ -18,21 +18,29 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/lang-ar' , function(){
+    session()->put('lang' , 'ar');
+    return back();
+});
+Route::get('/lang-en' , function(){
+    session()->put('lang' , 'en');
+    return back();
+});
 require __DIR__.'/auth.php';
 
 
-Route::get('/explore' , [PostController::class , 'explore'])->name('explore');
-Route::middleware('auth')->group(function () {
+Route::get('/explore' , [PostController::class , 'explore'])->name('explore')->middleware('lang');
+Route::middleware(['auth' , 'lang'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/{user:username}' , [UserController::class , 'index'])->name('user_profile');
-Route::get('/{user:username}/edit', [UserController::class , 'edit'])->middleware('auth')->name("edit_profile");
-Route::patch('/{user:username}/update' , [UserController::class , 'update'])->middleware('auth')->name('updata_profile');
+Route::get('/{user:username}' , [UserController::class , 'index'])->name('user_profile')->middleware('lang');
+Route::get('/{user:username}/edit', [UserController::class , 'edit'])->middleware(['auth' , 'lang'])->name("edit_profile");
+Route::patch('/{user:username}/update' , [UserController::class , 'update'])->middleware(['auth' , 'lang'])->name('updata_profile');
 
-Route::controller(PostController::class)->middleware('auth')->group(function(){
+Route::controller(PostController::class)->middleware(['auth' , 'lang'])->group(function(){
     Route::get('/', 'index')->name('home_page');
     Route::get('/p/create'  , 'create')->name('create_post');
     Route::post('/p/create'  , 'store')->name('stors_post');
@@ -44,10 +52,10 @@ Route::controller(PostController::class)->middleware('auth')->group(function(){
 });
 
 
-Route::get('/p/{post:slug}/like', LikeController::class )->middleware('auth') ;
-Route::get('/{user:username}/follow' , [UserController::class , 'follow'])->middleware('auth')->name('user_follow');
-Route::get('/{user:username}/unfollow' , [UserController::class , 'unfollow'])->middleware('auth')->name('user_unfollow');
+Route::get('/p/{post:slug}/like', LikeController::class )->middleware(['auth' , 'lang']) ;
+Route::get('/{user:username}/follow' , [UserController::class , 'follow'])->middleware(['auth' , 'lang'])->name('user_follow');
+Route::get('/{user:username}/unfollow' , [UserController::class , 'unfollow'])->middleware(['auth' , 'lang'])->name('user_unfollow');
 
 
 
-Route::post('/p/{post:slug}/comment' , [CommentController::class , 'store'])->name('stor_comment')->middleware('auth');
+Route::post('/p/{post:slug}/comment' , [CommentController::class , 'store'])->name('stor_comment')->middleware(['auth' , 'lang']);

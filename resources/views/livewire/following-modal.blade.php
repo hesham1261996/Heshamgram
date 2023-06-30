@@ -9,9 +9,9 @@
         @forelse ($this->following_list as $following)
             <li class="flex flex-row w-full p-3 items-center text-sm">
                 <div class="">
-                    <img src="{{$following->image}}" class="w-8 h-8 mr-2 rounded-full border border-neutral-300" alt="">
+                    <img src="{{$following->image}}" class="w-8 h-8 mr-2 rounded-full  rtl:ml-2 border border-neutral-300" alt="">
                 </div>
-                <div class="flex flex-col grow">
+                <div class="flex flex-col grow rtl:text-right">
                     <div class="font-bold">
                         <a href="{{$following->username}}">{{$following->username}}</a>
                     </div>

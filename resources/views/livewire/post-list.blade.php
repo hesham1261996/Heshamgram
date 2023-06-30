@@ -5,7 +5,7 @@
 
     @empty 
     <div class="max-w-2xl gap-8 mx-auto">
-        {{__('Start Fallowing Your Friends and Enjoy')}}
+        {{__('Start Following Your Friends and Enjoy')}}
     </div>
     @endforelse
 </div>

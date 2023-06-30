@@ -10,8 +10,7 @@
         </div>
         {{-- Username and buttons --}}
         <div class="px-4 col-span-2 md:ml-0 flex flex-row items-center order-2 md:col-span-3">
-            <div class="text-3xl mb-3">{{$user->username}}</div>
-            <div class="ml-3">
+            <div class="text-3xl mb-3 ltr:mr-3 rtl:ml-3">{{$user->username}}</div>
                 @auth
                     
                     @if ($user->id == auth()->id())
@@ -28,7 +27,6 @@
                         {{__('follow')}}
                     </a>
                 @endguest
-            </div>
         </div>
 
         {{-- user info --}}
@@ -40,11 +38,11 @@
         {{-- user status --}}
         <div class="col-span-4 my-5 py-2 border-y border-y-neutral-200 order-4 md:order-3 md:border-none md:px-4 md:col-start-2">
             <ul class="text-md flex flex-row justify-around md:justify-start md:space-x-10 md:text-xl">
-                <li class="flex flex-col md:flex-row text-center">
-                    <div class="md:mr-1 font-bold md:font-normal">
+                <li class="flex flex-col md:flex-row text-center rtl:ml-5">
+                    <div class="md:ltr:mr-1 md:rtl:ml-1 font-bold md:font-normal">
                         {{$user->posts->count()}}
                     </div>
-                    <span class="text-neutral-500 md:text-black ">{{$user->posts->count() >1 ? 'posts' : "post"}}</span>
+                    <span class="text-neutral-500 md:text-black ">{{$user->posts->count() >1 ? __('posts') :  __('post')}}</span>
                 </li>
                 <livewire:followers :userId="$user->id" />
                 

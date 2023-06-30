@@ -5,23 +5,26 @@
         {{-- Right side --}}
         <div class="hidden w-[60rem] lg:flex lg:flex-col pt-4">
             <div class="flex flex-row text-sm">
-                <div class="mr-5">
+                <div class="ltr:mr-5 rtl:ml-5">
                     <a href="/{{ auth()->user()->username }}">
-                        <img src="{{auth()->user()->image}}" alt="{{auth()->user()->username}}"
-                            class="border border-gray-300 rounded-full h-12 w-12">
+                        <img src="{{ auth()->user()->image }}" alt=""
+                            class="border border-gray-300 rounded-full h-12 w-12 object-cover">
                     </a>
                 </div>
                 <div class="flex flex-col">
-                    <a href="{{auth()->user()->username}}" class="font-bold">{{auth()->user()->username}}</a>
-                    <div class="text-gray-500 text-sm">{{ auth()->user()->name}}</div>
+                    <a href="/{{ auth()->user()->username }}" class="font-bold">
+                        {{ auth()->user()->username }}
+                    </a>
+                    <div class="text-gray-500 text-sm">{{ auth()->user()->name }}</div>
                 </div>
             </div>
+            {{-- Suggested Users --}}
             <div class="mt-5">
-                <h3 class="text-gray-500 font-bold">{{__('Suggested Users')}}</h3>
+                <h3 class="text-gray-500 font-bold">{{__('Suggestions For You')}}</h3>
                 <ul>
                     @foreach ($suggested_users as $suggested_user)
                         <li class="flex flex-row my-5 text-sm justify-items-center">
-                            <div class="mr-5">
+                            <div class="ltr:mr-5">
                                 <a href="/{{$suggested_user->username}}">
                                     <img src="{{$suggested_user->image}}" class="rounded-full h-9 w-9 border border-gray-300">
                                 </a>

@@ -29,11 +29,11 @@ class FollowButton extends Component
 
     protected function see_follow_state(){
         if(auth()->user()->is_pending($this->user)) {
-            $this->follow_state = 'Pending' ;
+            $this->follow_state = __('Pending') ;
         }elseif(auth()->user()->is_following($this->user)){
-            $this->follow_state = 'Unfollow' ;
+            $this->follow_state = __('Unfollow') ;
         }else{
-            $this->follow_state = 'Follow' ;
+            $this->follow_state = __('Follow') ;
         }
     }
  

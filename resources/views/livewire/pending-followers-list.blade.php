@@ -1,5 +1,5 @@
-<div>
-    <ul class="overflow">
+<div  class="max-h-64 overflow-y-auto">
+    <ul>
 
         @forelse (auth()->user()->pending_followers() as $pending)
             <li class="flex flex-row w-full p-3 items-center text-sm">

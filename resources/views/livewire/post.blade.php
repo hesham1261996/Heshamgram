@@ -5,7 +5,7 @@
     </div>
     <div class="card-body">
         <div class="max-h-[35rem] overflow-hidden">
-            <img src="image/{{$post->image}}" class="h-auto w-full object-cover" alt="{{$post->description}}">
+            <img src="storage/{{$post->image}}" class="h-auto w-full object-cover" alt="{{$post->description}}">
         </div>
         <div class="p-3 flex flex-row">
             <livewire:like  :post='$post'/>

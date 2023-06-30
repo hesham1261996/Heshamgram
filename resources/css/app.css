@@ -26,4 +26,7 @@
         margin-inline-start:irem ;
         margin-inline-end: irem;
     }
+* {
+    @apply font-body ;
+}
 }
